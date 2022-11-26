@@ -1,0 +1,7 @@
+{
+  "name": "tripapp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
