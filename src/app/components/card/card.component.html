@@ -1,0 +1,15 @@
+<ion-card button="true" class="card">
+  <ion-card-subtitle>
+    {{ data.name }}
+  </ion-card-subtitle>
+  <ion-card-content class="ion-no-padding desc">
+    {{ data.description }}
+  </ion-card-content>
+  <ion-row class="end">
+    <div *ngFor="let member of data.members">
+      <ion-avatar class="avatar">
+        <img alt="Silhouette of a person's head" [src]="'https://ui-avatars.com/api/?background=random&name='+ member.name" />
+      </ion-avatar>
+    </div>
+  </ion-row>
+</ion-card>

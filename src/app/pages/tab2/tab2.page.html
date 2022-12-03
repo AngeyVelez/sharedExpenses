@@ -1,0 +1,56 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Crear plan
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <form [formGroup]="newPlanFormGroup" (ngSubmit)="onClick()">
+    <ion-item>
+      <ion-label position="floating">Nombre</ion-label>
+      <ion-input placeholder="Ingrese el nombre del plan" formControlName="name"></ion-input>
+      <!-- <div *ngFor="let validation of validations.name">
+        <span class="error ion-padding"
+          *ngIf="newPlanFormGroup.get('name')?.hasError(validation.type) && (newPlanFormGroup.get('name')?.dirty || newPlanFormGroup.get('name')?.touched)">
+          {{validation.message}}
+        </span>
+      </div> -->
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Descripción</ion-label>
+      <ion-input placeholder="Ingrese alguna descripción del plan" formControlName="description"></ion-input>
+    </ion-item>
+
+    <div formArrayName="members">
+      <ion-item *ngFor="let member of getMembersControls(); let idx = index">
+        <ion-label position="floating">Integrante N°{{ idx + 1 }}</ion-label>
+        <ion-row>
+          <ion-input placeholder="Ingrese el nombre de un integrante" type="text" text-right
+            formControlName="{{idx}}"></ion-input>
+  
+          <ion-button shape="circle" (click)="removeField(idx)">
+            <ion-icon name="trash"></ion-icon>
+          </ion-button>
+        </ion-row>
+      </ion-item>
+    </div>
+
+    <ion-item>
+      <ion-button shape="circle" (click)="addField()">
+        <ion-icon name="add-circle"></ion-icon>
+         Añadir integrante
+      </ion-button>
+    </ion-item>
+
+    <ion-button expand="full" type="submit">Crear</ion-button>
+  </form>
+
+  <!-- <ion-item>
+    <ion-label position="floating">Precio</ion-label>
+    <ion-input type="number" placeholder=" Ingrese el precio del plan">$</ion-input>
+  </ion-item> -->
+
+</ion-content>

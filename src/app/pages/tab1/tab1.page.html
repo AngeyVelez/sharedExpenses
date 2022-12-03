@@ -1,0 +1,29 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Planes
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="plans">
+
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div *ngFor="let plan of plans">
+          <ion-item-sliding>
+            <ion-item>
+              <app-card [data]="plan" (click)="onClick(plan.id)" style="width: 100%;"></app-card>
+            </ion-item>
+        
+            <ion-item-options>
+              <ion-item-option color="danger" (click)="removePlan(plan.id)">Eliminar</ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

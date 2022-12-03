@@ -1,0 +1,88 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Detalles del plan
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-row>
+    <p> <b> Plan: </b> {{ plan?.name }} </p>
+  </ion-row>
+  <ion-row>
+    <p> <b> Descripción: </b> {{ plan?.description }} </p>
+  </ion-row>
+  <ion-row>
+    <p> <b> Fecha: </b> {{ createdAt | date:'mediumDate' }} </p>
+  </ion-row>
+  <ion-col>
+    <div *ngFor="let member of plan?.members">
+      <ion-row class="align-center">
+        <ion-avatar class="avatar">
+          <img alt="Silhouette of a person's head"
+            [src]="'https://ui-avatars.com/api/?background=random&name='+ member.name" />
+        </ion-avatar>
+        {{ member.name }}
+      </ion-row>
+    </div>
+  </ion-col>
+
+  <ion-button id="open-modal" expand="block">Añadir gasto</ion-button>
+
+  <div *ngIf="plan?.spents">
+    <ion-col>
+      <h5> Gastos registrados </h5>
+
+      <div *ngFor="let spent of this.plan.spents">
+        <p>
+          {{ spent.member }}
+          {{ spent.name }}
+          {{ spent.price | currency : 'COP' }}
+        </p>
+      </div>
+    </ion-col>
+  </div>
+
+  <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
+    <ng-template>
+
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button (click)="cancel()">Cancelar</ion-button>
+          </ion-buttons>
+          <ion-title>Añadir gasto</ion-title>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="ion-padding">
+
+        <form [formGroup]="newSpentFormGroup" (ngSubmit)="onClick()">
+          <ion-item>
+            <ion-label position="floating">Nombre del gasto</ion-label>
+            <ion-input type="text" placeholder="Motivo del gasto" formControlName="name"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Descripción</ion-label>
+            <ion-input type="text" placeholder="Descripción del gasto" formControlName="description"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Precio</ion-label>
+            <ion-input type="number" placeholder="Valor del gasto" formControlName="price"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-select interface="action-sheet" placeholder="Quién realizó el gasto" formControlName="member">
+              <ion-select-option *ngFor="let member of plan.members" value="{{member.id}}"> {{ member.name }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-button expand="full" type="submit">Crear</ion-button>
+        </form>
+
+      </ion-content>
+
+    </ng-template>
+  </ion-modal>
+
+</ion-content>
