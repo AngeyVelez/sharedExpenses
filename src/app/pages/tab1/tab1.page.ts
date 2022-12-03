@@ -36,8 +36,8 @@ export class Tab1Page implements OnInit {
   }
   
   removePlan(id: string){
-    this.planService.deleteRegister(id).then((resp: any) => {
-      
+    this.planService.deleteRegister(id).then(() => {
+      this.plans = this.plans.filter(plan => plan.id !== id)
     }).catch(console.error)
   }
 

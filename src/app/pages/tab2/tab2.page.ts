@@ -46,9 +46,9 @@ export class Tab2Page implements OnInit {
   }
 
   onClick() {
-    const formatMembers = this.newPlanFormGroup.value.members.map((m: string) => ({ name: m, id: (new Date().getTime()), createdAt: new Date() }))
+    const formatMembers = this.newPlanFormGroup.value.members.map((m: string) => ({ name: m, id: (new Date().getTime())}))
     this.planService.createRegister(
-      { ...this.newPlanFormGroup.value, members: formatMembers }
+      { ...this.newPlanFormGroup.value, members: formatMembers, createdAt: new Date() }
     ).catch(console.error)
   }
 
