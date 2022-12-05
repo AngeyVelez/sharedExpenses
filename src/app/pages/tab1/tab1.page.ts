@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { InfiniteScrollCustomEvent } from '@ionic/angular';
+import { InfiniteScrollCustomEvent, ToastController } from '@ionic/angular';
 import { PlanService } from '../../services/plan.service';
 
 @Component({
@@ -14,7 +14,8 @@ export class Tab1Page implements OnInit {
 
   constructor(
     private planService: PlanService,
-    private router: Router
+    private router: Router,
+    private toastController: ToastController
   ) { }
 
   ngOnInit(): void {
@@ -37,8 +38,19 @@ export class Tab1Page implements OnInit {
   
   removePlan(id: string){
     this.planService.deleteRegister(id).then(() => {
+      this.presentToast("bottom", "Eliminado exitosamente");
       this.plans = this.plans.filter(plan => plan.id !== id)
-    }).catch(console.error)
+    }).catch(console.error);
+  }
+
+  async presentToast(position: 'bottom', message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 1500,
+      position: position
+    });
+
+    await toast.present();
   }
 
   onIonInfinite(ev: any) {

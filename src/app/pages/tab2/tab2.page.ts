@@ -3,6 +3,8 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { PlanService } from '../../services/plan.service';
+import { v4 as uuidv4 } from 'uuid';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tab2',
@@ -17,7 +19,8 @@ export class Tab2Page implements OnInit {
 
   constructor(
     private _formBuilder: FormBuilder,
-    private planService: PlanService
+    private planService: PlanService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -46,10 +49,12 @@ export class Tab2Page implements OnInit {
   }
 
   onClick() {
-    const formatMembers = this.newPlanFormGroup.value.members.map((m: string) => ({ name: m, id: (new Date().getTime())}))
+    const formatMembers = this.newPlanFormGroup.value.members.map((m: string) => ({ name: m, id: uuidv4()}))
     this.planService.createRegister(
       { ...this.newPlanFormGroup.value, members: formatMembers, createdAt: new Date() }
-    ).catch(console.error)
+    ).catch(console.error);
+    this.newPlanFormGroup.reset();
+    this.router.navigate(['/tabs/tab1']);
   }
 
   getErrorMessage() {

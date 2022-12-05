@@ -1,5 +1,8 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button color="medium" text="Volver" icon="chevron-back-outline"></ion-back-button>
+    </ion-buttons>
     <ion-title>
       Detalles del plan
     </ion-title>
@@ -29,25 +32,33 @@
     </div>
   </ion-col>
 
-  <ion-button id="open-modal" expand="block">Añadir gasto</ion-button>
+  <ion-button id="create-modal" expand="block">Añadir gasto</ion-button>
 
   <div *ngIf="plan?.spents">
     <ion-col>
       <h5> Gastos registrados </h5>
-
-      <div *ngFor="let spent of this.plan.spents">
-        <p>
-          {{ spent.member }}
-          {{ spent.name }}
-          {{ spent.price | currency : 'COP' }}
-        </p>
-      </div>
+      <ion-accordion-group>
+        <ion-accordion *ngFor="let spent of this.plan.spents">
+          <ion-item slot="header" color="light">
+            <ion-label>
+              {{ spent.price | currency : 'COP' }}
+              {{ spent.name }}
+            </ion-label>
+          </ion-item>
+          <div class="ion-padding" slot="content">
+            <p>{{ getMember(spent.member).name }}</p>
+            <p>{{ spent.description }}</p>
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
     </ion-col>
+    <canvas #pieCanvas></canvas>
   </div>
 
-  <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
-    <ng-template>
+  <ion-button id="balance-modal" expand="block" style="margin-top: 15px;">Generar balance</ion-button>
 
+  <ion-modal trigger="create-modal">
+    <ng-template>
       <ion-header>
         <ion-toolbar>
           <ion-buttons slot="start">
@@ -58,7 +69,6 @@
       </ion-header>
 
       <ion-content class="ion-padding">
-
         <form [formGroup]="newSpentFormGroup" (ngSubmit)="onClick()">
           <ion-item>
             <ion-label position="floating">Nombre del gasto</ion-label>
@@ -74,14 +84,34 @@
           </ion-item>
           <ion-item>
             <ion-select interface="action-sheet" placeholder="Quién realizó el gasto" formControlName="member">
-              <ion-select-option *ngFor="let member of plan.members" value="{{member.id}}"> {{ member.name }}</ion-select-option>
+              <ion-select-option *ngFor="let member of plan.members" value="{{member.id}}"> {{ member.name }}
+              </ion-select-option>
             </ion-select>
           </ion-item>
           <ion-button expand="full" type="submit">Crear</ion-button>
         </form>
-
       </ion-content>
+    </ng-template>
+  </ion-modal>
 
+  <ion-modal trigger="balance-modal">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button (click)="cancel()">Cancelar</ion-button>
+          </ion-buttons>
+          <ion-title>Balance del plan</ion-title>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="ion-padding">
+        <ion-item *ngFor="let item of closeouts">
+          <ion-label class="ion-text-wrap">
+            {{ item }}
+          </ion-label>
+        </ion-item>
+      </ion-content>
     </ng-template>
   </ion-modal>
 
