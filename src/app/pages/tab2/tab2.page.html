@@ -36,7 +36,7 @@
         <ion-row>
           <ion-input placeholder="Ingrese el nombre de un integrante" type="text" text-right
             formControlName="{{idx}}"></ion-input>
-            <ion-button shape="circle" (click)="removeField(idx)">
+            <ion-button shape="circle" (click)="removeField(idx)" *ngIf="getMembersControls().length > 1">
               <ion-icon name="trash"></ion-icon>
             </ion-button>
           </ion-row>

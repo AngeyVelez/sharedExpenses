@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { PlanService } from '../../services/plan.service';
 import { v4 as uuidv4 } from 'uuid';
 import { Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab2',
@@ -20,7 +21,8 @@ export class Tab2Page implements OnInit {
   constructor(
     private _formBuilder: FormBuilder,
     private planService: PlanService,
-    private router: Router
+    private router: Router,
+    private toastController: ToastController
   ) { }
 
   ngOnInit(): void {
@@ -51,12 +53,27 @@ export class Tab2Page implements OnInit {
   }
 
   onClick() {
-    const formatMembers = this.newPlanFormGroup.value.members.map((m: string) => ({ name: m, id: uuidv4()}))
-    this.planService.createRegister(
-      { ...this.newPlanFormGroup.value, members: formatMembers, createdAt: new Date() }
-    ).catch(console.error);
-    this.newPlanFormGroup.reset();
-    this.router.navigate(['/tabs/tab1']);
+    if (this.newPlanFormGroup.valid && this.newPlanFormGroup.dirty) {
+      const formatMembers = this.newPlanFormGroup.value.members.map((m: string) => ({ name: m, id: uuidv4()}))
+      this.planService.createRegister(
+        { ...this.newPlanFormGroup.value, members: formatMembers, createdAt: new Date() }
+      ).catch(console.error);
+      this.newPlanFormGroup.reset();
+      this.router.navigate(['/tabs/tab1']);
+    } else {
+      this.newPlanFormGroup.markAllAsTouched()
+      this.presentToast("top", "Revise y complete el formulario")
+    }
+  }
+
+  async presentToast(position: any = 'bottom', message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 1500,
+      position: position
+    });
+
+    await toast.present();
   }
 
   getErrorMessage() {

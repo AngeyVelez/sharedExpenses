@@ -14,6 +14,7 @@ import { Chart } from 'chart.js/auto';
 export class DetailsComponent implements OnInit {
   @ViewChild('pieCanvas', { static: false, read: ElementRef }) canvas: any;
 
+  validations: any;
   newSpentFormGroup!: FormGroup;
   plan: any;
   createdAt: any;
@@ -43,9 +44,9 @@ export class DetailsComponent implements OnInit {
       name: ['', [Validators.compose([Validators.required, Validators.pattern('[A-ZÑa-zñÀ-ÿ]+[A-ZÑa-zñÀ-ÿ0-9 ]*'), Validators.maxLength(80)])]],
       description: ['', [Validators.compose([Validators.required, Validators.pattern('[A-ZÑa-zñÀ-ÿ]+[A-ZÑa-zñÀ-ÿ0-9 ]*'), Validators.maxLength(200)])]],
       price: ['', [Validators.compose([Validators.required, Validators.pattern('[0-9 ]*'), Validators.maxLength(20)])]],
-      member: ['', [Validators.compose([Validators.required, Validators.pattern('[A-ZÑa-zñÀ-ÿ]+[A-ZÑa-zñÀ-ÿ0-9 ]*'), Validators.maxLength(80)])]],
+      member: ['', [Validators.compose([Validators.required])]],
     });
-    // this.getErrorMessage()
+    this.getErrorMessage()
   }
 
   ngAfterViewInit() {
@@ -58,24 +59,26 @@ export class DetailsComponent implements OnInit {
   }
 
   async onClick() {
-    try {
+    if (this.newSpentFormGroup.valid && this.newSpentFormGroup.touched) {
       const spents = [...(this.plan?.spents ? this.plan.spents : []), this.newSpentFormGroup.value];
       const planUpdated = { ...this.plan, spents };
       await this.planService.updateRegister(this.plan.id, planUpdated);
       this.presentToast("bottom", "Creado exitosamente");
       this.cancel();
       this.newSpentFormGroup.reset();
-    } catch (error) {
-      console.error(error);
+    } else {
+      this.presentToast('top', "Revise y complete el formulario");
+      this.newSpentFormGroup.markAllAsTouched();
     }
   }
 
   cancel() {
     this.modal.dismiss(null, 'Cancelar');
+    this.newSpentFormGroup.reset();
     this.getPlan(this.plan.id);
   }
 
-  async presentToast(position: 'bottom', message: string) {
+  async presentToast(position: any = 'bottom', message: string) {
     const toast = await this.toastController.create({
       message: message,
       duration: 1500,
@@ -90,12 +93,34 @@ export class DetailsComponent implements OnInit {
     return member
   }
 
+  getErrorMessage() {
+    this.validations = {
+      'name': [
+        { type: 'required', message: 'El nombre es requerido' },
+        { type: 'pattern', message: 'Se debe ingresar un nombre válido' },
+        { type: 'maxlength', message: 'Máximo 80 caracteres' },
+      ],
+      'description': [
+        { type: 'required', message: 'La descripción es requerido' },
+        { type: 'maxlength', message: 'Máximo 200 caracteres' },
+      ],
+      'price': [
+        { type: 'required', message: 'El precio es requerido' },
+        { type: 'pattern', message: 'Se debe ingresar un precio válido' },
+        { type: 'maxlength', message: 'Máximo 80 caracteres' },
+      ],
+      'member': [
+        { type: 'required', message: 'El integrante es requerido' }
+      ]
+    };
+  }
+
   getSummary() {
     this.summary = this.plan.members.reduce((prev: any, curr: any) => {
       prev[curr.id] = 0;
       return prev
     }, {})
-    
+
     this.plan.spents.forEach((element: any) => {
       if (this.summary[element.member]) {
         this.summary[element.member] += element.price;
@@ -180,7 +205,7 @@ export class DetailsComponent implements OnInit {
         deudor.balance += adeudado.balance;
         j++;
       }
-      
+
     } while (i < debtors.length && j < acreedor.length);
   }
 
