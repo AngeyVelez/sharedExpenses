@@ -28,7 +28,7 @@ export class Tab2Page implements OnInit {
       name: ['', [Validators.compose([Validators.required, Validators.pattern('[A-ZÑa-zñÀ-ÿ]+[A-ZÑa-zñÀ-ÿ0-9 ]*'), Validators.maxLength(80)])]],
       description: ['', [Validators.compose([Validators.required, Validators.pattern('[A-ZÑa-zñÀ-ÿ]+[A-ZÑa-zñÀ-ÿ0-9 ]*'), Validators.maxLength(200)])]],
       members: this._formBuilder.array([
-        new FormControl()
+        new FormControl('', Validators.compose([Validators.required, Validators.pattern('[A-ZÑa-zñÀ-ÿ]+[A-ZÑa-zñÀ-ÿ0-9 ]*'), Validators.maxLength(80)]))
       ])
     });
     this.getErrorMessage()
@@ -36,7 +36,9 @@ export class Tab2Page implements OnInit {
 
   addField() {
     const control = <FormArray>this.newPlanFormGroup.get('members');
-    control.push(new FormControl())
+    control.push(
+      new FormControl('', Validators.compose([Validators.required, Validators.pattern('[A-ZÑa-zñÀ-ÿ]+[A-ZÑa-zñÀ-ÿ0-9 ]*'), Validators.maxLength(80)]))
+    )
   }
 
   removeField(index: number) {

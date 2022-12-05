@@ -13,7 +13,7 @@
       <ion-col>
         <div *ngFor="let plan of plans">
           <ion-item-sliding>
-            <ion-item>
+            <ion-item class="ion-no-padding">
               <app-card [data]="plan" (click)="onClick(plan.id)" style="width: 100%;"></app-card>
             </ion-item>
         

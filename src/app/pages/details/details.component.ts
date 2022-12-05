@@ -95,6 +95,7 @@ export class DetailsComponent implements OnInit {
       prev[curr.id] = 0;
       return prev
     }, {})
+    
     this.plan.spents.forEach((element: any) => {
       if (this.summary[element.member]) {
         this.summary[element.member] += element.price;
@@ -172,10 +173,10 @@ export class DetailsComponent implements OnInit {
       const adeudado = acreedor[j];
       if (Math.abs(deudor.balance) < adeudado.balance) {
         adeudado.balance += deudor.balance;
-        this.closeouts.push(`${deudor.member.name} debe pagarle a ${adeudado.member.name} el valor de: ${Math.abs(deudor.balance)}`);
+        this.closeouts.push(`${deudor.member.name} debe pagarle a ${adeudado.member.name} el valor de: $${Math.abs(deudor.balance)}`);
         i++;
       } else {
-        this.closeouts.push(`${deudor.member.name} debe pagarle a ${adeudado.member.name} el valor de: ${adeudado.balance}`);
+        this.closeouts.push(`${deudor.member.name} debe pagarle a ${adeudado.member.name} el valor de: $${adeudado.balance}`);
         deudor.balance += adeudado.balance;
         j++;
       }

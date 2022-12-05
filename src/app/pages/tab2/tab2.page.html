@@ -11,17 +11,23 @@
     <ion-item>
       <ion-label position="floating">Nombre</ion-label>
       <ion-input placeholder="Ingrese el nombre del plan" formControlName="name"></ion-input>
-      <!-- <div *ngFor="let validation of validations.name">
-        <span class="error ion-padding"
+      <div *ngFor="let validation of validations.name">
+        <span class="error"
           *ngIf="newPlanFormGroup.get('name')?.hasError(validation.type) && (newPlanFormGroup.get('name')?.dirty || newPlanFormGroup.get('name')?.touched)">
           {{validation.message}}
         </span>
-      </div> -->
+      </div>
     </ion-item>
 
     <ion-item>
       <ion-label position="floating">Descripción</ion-label>
       <ion-input placeholder="Ingrese alguna descripción del plan" formControlName="description"></ion-input>
+      <div *ngFor="let validation of validations.description">
+        <span class="error"
+          *ngIf="newPlanFormGroup.get('description')?.hasError(validation.type) && (newPlanFormGroup.get('description')?.dirty || newPlanFormGroup.get('description')?.touched)">
+          {{validation.message}}
+        </span>
+      </div>
     </ion-item>
 
     <div formArrayName="members">
@@ -30,11 +36,16 @@
         <ion-row>
           <ion-input placeholder="Ingrese el nombre de un integrante" type="text" text-right
             formControlName="{{idx}}"></ion-input>
-  
-          <ion-button shape="circle" (click)="removeField(idx)">
-            <ion-icon name="trash"></ion-icon>
-          </ion-button>
-        </ion-row>
+            <ion-button shape="circle" (click)="removeField(idx)">
+              <ion-icon name="trash"></ion-icon>
+            </ion-button>
+          </ion-row>
+          <div *ngFor="let validation of validations.member">
+            <span class="error"
+              *ngIf="member?.hasError(validation.type) && (member?.dirty || member?.touched)">
+              {{validation.message}}
+            </span>
+          </div>
       </ion-item>
     </div>
 
