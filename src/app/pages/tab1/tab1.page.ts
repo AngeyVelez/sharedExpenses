@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { InfiniteScrollCustomEvent, ToastController } from '@ionic/angular';
 import { PlanService } from '../../services/plan.service';
 
@@ -8,18 +8,19 @@ import { PlanService } from '../../services/plan.service';
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss']
 })
-export class Tab1Page implements OnInit {
+export class Tab1Page {
 
   public plans: Array<any> = [];
 
   constructor(
     private planService: PlanService,
     private router: Router,
-    private toastController: ToastController
-  ) { }
-
-  ngOnInit(): void {
-    this.getPlans();
+    private toastController: ToastController,
+    private route: ActivatedRoute
+  ) {
+    this.route.params.subscribe(() => {
+      this.getPlans()
+    });
   }
 
   getPlans() {
