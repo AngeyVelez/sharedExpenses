@@ -52,12 +52,13 @@ export class Tab2Page implements OnInit {
     return (this.newPlanFormGroup.get('members') as FormArray).controls;
   }
 
-  onClick() {
+  async onClick() {
     if (this.newPlanFormGroup.valid && this.newPlanFormGroup.dirty) {
       const formatMembers = this.newPlanFormGroup.value.members.map((m: string) => ({ name: m, id: uuidv4()}))
-      this.planService.createRegister(
+      await this.planService.createRegister(
         { ...this.newPlanFormGroup.value, members: formatMembers, createdAt: new Date() }
       ).catch(console.error);
+      this.presentToast("top", "Creado exitosamente");
       this.newPlanFormGroup.reset();
       this.router.navigate(['/tabs/tab1']);
     } else {
