@@ -55,7 +55,7 @@ export class DetailsComponent implements OnInit {
   async getPlan(id: string) {
     const resp: any = await this.planService.getRegisterById(id)
     this.plan = { ...resp, id: id };
-    this.createdAt = new Date(resp.createdAt.seconds);
+    this.createdAt = new Date(resp.createdAt.toDate());
   }
 
   async onClick() {
